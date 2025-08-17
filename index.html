@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lecture Timetable</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      margin: 15px 0;
+    }
+    .timetable {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .lecture {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+    .lecture:last-child {
+      border-bottom: none;
+    }
+    .time {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .subject {
+      margin-left: 10px;
+      color: #555;
+    }
+    .nav-bar {
+      display: flex;
+      justify-content: space-around;
+      background: #2c3e50;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .nav-bar button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 5px 10px;
+    }
+    .nav-bar button.active {
+      border-bottom: 2px solid #1abc9c;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>My Timetable</h1>
+  <div class="timetable" id="timetable"></div>
+
+  <div class="nav-bar">
+    <button onclick="showDay('Monday')" id="btn-Monday">MON</button>
+    <button onclick="showDay('Tuesday')" id="btn-Tuesday">TUE</button>
+    <button onclick="showDay('Wednesday')" id="btn-Wednesday">WED</button>
+    <button onclick="showDay('Thursday')" id="btn-Thursday">THU</button>
+    <button onclick="showDay('Friday')" id="btn-Friday">FRI</button>
+  </div>
+
+  <script>
+    const timetableData = {
+      Monday: [
+        { time: "9:30 - 10:20", subject: "M-3 (312)" },
+        { time: "10:20 - 11:10", subject: "DSA (310)" },
+        { time: "11:10 - 12:00", subject: "DOS (502)" },
+        { time: "12:00 - 12:50", subject: "FREE" },
+        { time: "1:35 - 2:20", subject: "ITW Lab (G2)(511)" },
+        { time: "2:20 - 3:05", subject: "ITW Lab (G2)(511)" },
+        { time: "3:05 - 3:50", subject: "FREE" },
+        { time: "3:50 - 4:35", subject: "MMP (312)" }
+      ],
+      Tuesday: [
+        { time: "9:30 - 10:20", subject: "OOPS (403)" },
+        { time: "10:20 - 11:10", subject: "DSA (403)" },
+        { time: "11:10 - 12:00", subject: "OOPS Lab (511)" },
+        { time: "12:00 - 12:50", subject: "OOPS Lab (511)" },
+        { time: "1:35 - 2:20", subject: "DE (312)" },
+        { time: "2:20 - 3:05", subject: "FREE" },
+        { time: "3:05 - 3:50", subject: "FREE" },
+        { time: "3:50 - 4:35", subject: "M-3 (312)" }
+      ],
+      Wednesday: [
+        { time: "9:30 - 10:20", subject: "DE Lab (G2)(505)" },
+        { time: "10:20 - 11:10", subject: "DE Lab (G2)(505)" },
+        { time: "11:10 - 12:00", subject: "DSA,(402)" },
+        { time: "12:00 - 12:50", subject: "DOS,  (402)" },
+        { time: "1:35 - 2:20", subject: "DE (402)" },
+        { time: "2:20 - 3:05", subject: "FREE" },
+        { time: "3:05 - 3:50", subject: "M-3 (412)" },
+        { time: "3:50 - 4:35", subject: "FREE" }
+      ],
+      Thursday: [
+        { time: "9:30 - 10:20", subject: "OOPS (402)" },
+        { time: "10:20 - 11:10", subject: "DE (402)" },
+        { time: "11:10 - 12:00", subject: "DSA Lab (411)" },
+        { time: "12:00 - 12:50", subject: "DSA Lab (411)" },
+        { time: "1:35 - 2:20", subject: "DOS (402)" },
+        { time: "2:20 - 3:05", subject: "FREE" },
+        { time: "3:05 - 3:50", subject: "DSA Lab (411)" },
+        { time: "3:50 - 4:35", subject: "DSA Lab (411)" }
+      ],
+      Friday: [
+        { time: "9:30 - 10:20", subject: "OOPS (312)" },
+        { time: "10:20 - 11:10", subject: "M-3 (312)" },
+        { time: "11:10 - 12:00", subject: "FREE" },
+        { time: "12:00 - 12:50", subject: "DSA (502)" },
+        { time: "1:35 - 2:20", subject: "OOPS (402)" },
+        { time: "2:20 - 3:05", subject: "FREE" },
+        { time: "3:05 - 3:50", subject: "OOPS Lab (511)" },
+        { time: "3:50 - 4:35", subject: "OOPS Lab (511)" }
+      ]
+    };
+
+    function showDay(day) {
+      const container = document.getElementById("timetable");
+      container.innerHTML = "";
+      timetableData[day].forEach(lec => {
+        const div = document.createElement("div");
+        div.className = "lecture";
+        div.innerHTML = `<span class="time">${lec.time}</span> <span class="subject">${lec.subject}</span>`;
+        container.appendChild(div);
+      });
+      document.querySelectorAll('.nav-bar button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btn-' + day).classList.add('active');
+    }
+
+    // Show current day by default
+    const daysMap = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    let today = daysMap[new Date().getDay()];
+    if (!timetableData[today]) today = "Monday";
+    showDay(today);
+  </script>
+</body>
+</html>
